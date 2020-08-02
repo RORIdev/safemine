@@ -19,7 +19,7 @@ class BreakHandler : Listener {
         if(!event.player.inventory.hasSpace(event.block.drops.toMutableList())) cancelEvent(event)
         if(event.player.inventory.itemInMainHand.containsEnchantment(Enchantment.MENDING)
                 || event.player.inventory.itemInOffHand.containsEnchantment(Enchantment.MENDING)
-                || event.player.inventory.armorContents.any{it.containsEnchantment(Enchantment.MENDING)}) {
+                || event.player.inventory.armorContents.any{it != null && it.containsEnchantment(Enchantment.MENDING)}) {
             event.player.giveExp(event.expToDrop, true)
         } else {
             event.player.giveExp(event.expToDrop, false)
