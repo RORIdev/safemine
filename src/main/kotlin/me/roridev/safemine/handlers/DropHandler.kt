@@ -68,7 +68,8 @@ class DropHandler : Listener {
 }
 fun PlayerInventory.hasSpace(items: MutableList<ItemStack>): Boolean {
 
-    if(contents.filterNotNull().size < 36) { //Slot available
+    val inventorySize = 36 + if(itemInOffHand.amount == 0) 0 else 1
+    if(contents.filterNotNull().size < inventorySize) { //Slot available
         return true
     }
     //From now on the check is only done if the inventory has no spaces left.
