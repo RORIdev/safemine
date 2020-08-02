@@ -36,7 +36,6 @@ class DropHandler : Listener {
     }
 
     private fun transferItems(event : BlockDropItemEvent, item: ItemStack){
-        event.isCancelled = true
         val inventory = event.player.inventory
         val stack = inventory.contents.filterNotNull().firstOrNull {it.type == item.type}
         if(stack == null){
