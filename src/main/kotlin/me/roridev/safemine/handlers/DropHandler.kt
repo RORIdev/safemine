@@ -17,7 +17,7 @@ class DropHandler : Listener {
     fun Drop(event: BlockDropItemEvent){
         if(event.player.gameMode != GameMode.SURVIVAL) return
         if(!event.player.inventory.hasSpace(event.items.map{x -> x.itemStack}.toMutableList())) {
-            cancelEvent(event)
+            dropItem(event)
             return
         }
         event.isCancelled = true
@@ -26,13 +26,13 @@ class DropHandler : Listener {
         }
     }
 
-    private fun cancelEvent(event: BlockDropItemEvent){
-        event.isCancelled = true
+    private fun dropItem(event: BlockDropItemEvent){
+        if(Safemine.config.getBoolean("blockEvent")) event.isCancelled = true
         val player = event.player
         val component = TextComponent(Safemine.config.getString("message.fullInv"))
         component.color = ChatColor.RED
-        player.sendTitle(Title(component))
-        player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP,0.3f,1.0f)
+        player.sendActionBar(component)
+        if(!Safemine.config.getBoolean("silent")) player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP,0.3f,1.0f)
     }
 
     private fun transferItems(event : BlockDropItemEvent, item: ItemStack){
@@ -40,10 +40,10 @@ class DropHandler : Listener {
         val stack = inventory.contents.filterNotNull().firstOrNull {it.type == item.type}
         if(stack == null){
             if(!inventory.hasSpace(event.items.map{x -> x.itemStack}.toMutableList())) {
-                cancelEvent(event)
+                dropItem(event)
                 return
             }
-            newItemStack(inventory,item)
+            if(!newItemStack(inventory,item)) dropItem(event)
             return
         }
         val index = inventory.contents.indexOfFirst { it?.type == item.type }
@@ -55,13 +55,14 @@ class DropHandler : Listener {
             stack.amount = stack.maxStackSize
             item.amount = reminder
             inventory.contents[index] = stack
-            newItemStack(inventory,item)
+            if(!newItemStack(inventory,item)) dropItem(event)
         }
     }
 
-    private fun newItemStack(inv: PlayerInventory, stack: ItemStack) {
-        if(!inv.hasSpace(mutableListOf(stack))) return
+    private fun newItemStack(inv: PlayerInventory, stack: ItemStack) : Boolean{
+        if(!inv.hasSpace(mutableListOf(stack))) return false
         inv.addItem(stack)
+        return true
     }
 
 }
