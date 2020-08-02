@@ -27,12 +27,12 @@ class BreakHandler : Listener {
         event.expToDrop = 0
     }
     private fun cancelEvent(event: BlockBreakEvent){
-        event.isCancelled = true
+        if(Safemine.config.getBoolean("blockEvent")) event.isCancelled = true
         val player = event.player
         val component = TextComponent(Safemine.config.getString("message.fullInv"))
         component.color = ChatColor.RED
-        player.sendTitle(Title(component))
-        player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP,0.3f,1.0f)
+        player.sendActionBar(component)
+        if(!Safemine.config.getBoolean("silent")) player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP,0.3f,1.0f)
     }
 }
 
