@@ -1,0 +1,6 @@
+name: "safemine"
+version: ${project.version}
+api-version: "1.13"
+authors : ["roridev"]
+description: "Puts mined blocks directly into the players inventory whenever possible"
+main: me.roridev.safemine.Safemine
