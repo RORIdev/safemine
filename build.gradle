@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'me.roridev.safemine'
-version '1.0-snapshot'
+version '1.1'
 
 repositories {
     mavenCentral()
