@@ -16,7 +16,10 @@ class BreakHandler : Listener {
     fun Break(event : BlockBreakEvent){
         if(event.player.gameMode != GameMode.SURVIVAL) return
         if(!event.isDropItems) return
-        if(!event.player.inventory.hasSpace(event.block.drops.toMutableList())) cancelEvent(event)
+        if(!event.player.inventory.hasSpace(event.block.drops.toMutableList())) {
+            cancelEvent(event)
+            return
+        }
         if(event.player.inventory.itemInMainHand.containsEnchantment(Enchantment.MENDING)
                 || event.player.inventory.itemInOffHand.containsEnchantment(Enchantment.MENDING)
                 || event.player.inventory.armorContents.any{it != null && it.containsEnchantment(Enchantment.MENDING)}) {
