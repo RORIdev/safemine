@@ -1,3 +1,4 @@
 message.fullInv: "Inventory Full"
 blockEvent : false
 silent: false
+backpacks: true
